@@ -88,6 +88,7 @@ public class Creature implements Fightable{
 
     @Override
     public Integer attack() {
+        System.out.println(this.creatureType + " attacks!");
         if (this.dexterity > random(1, 10)) {
             int dmg = this.strength + random(0, 3);
             System.out.println("Successful attack: " + dmg + " damage!");
@@ -99,6 +100,8 @@ public class Creature implements Fightable{
 
     @Override
     public void dodge(Integer potentialDamage) {
+        System.out.println(this.creatureType + " defends");
+
         if (this.initiative > random(1, 10)) {
             System.out.println("Successful dodge!");
             return;
@@ -107,8 +110,11 @@ public class Creature implements Fightable{
         int dmg = potentialDamage - this.endurance;
 
         if (dmg > 0) {
-            this.lifePoints -= dmg;
+            this.lifePoints = this.lifePoints < dmg ? this.lifePoints - dmg : 0;
+        } else {
+            System.out.println(this.creatureType + " is unharmed");
         }
+        System.out.println(this.creatureType + " has " + this.lifePoints + " life points");
 
         if (!isAlive()) {
             System.out.println(this.creatureType + " is dead");
