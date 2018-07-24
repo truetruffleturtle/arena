@@ -1,8 +1,8 @@
 package com.stepstone.arena;
 
-import java.util.Random;
+import java.util.*;
 
-public class Creature implements Fightable{
+public class Creature implements Fightable {
     private Integer strength;
     private Integer dexterity;
     private Integer initiative;
@@ -87,32 +87,60 @@ public class Creature implements Fightable{
     }
 
     @Override
-    public Integer attack() {
+    public AttackResult attack() {
         System.out.println(this.creatureType + " attacks!");
-        if (this.dexterity > random(1, 10)) {
-            int dmg = this.strength + random(0, 3);
-            System.out.println("Successful attack: " + dmg + " damage!");
-            return dmg;
+
+        int damage = 0;
+        int attackNumber = 0;
+        BodyPart bodyPart = null;
+
+        try {
+            attackNumber++;
+
+            bodyPart = getRandomBodyPart();
+            System.out.println(bodyPart + " hit!");
+
+            damage = this.strength + random(0, 3) + bodyPart.getBonus();
+            System.out.println("Successful attack: " + damage + " points potential damage!");
+
+        } catch (AttackFailedException ex) {
+            System.out.println("First attack failed. Second attack!");
+
+            if (this.dexterity > random(1, 10)) {
+                attackNumber++;
+
+                damage = this.strength + random(0, 3);
+                System.out.println("Successful attack: " + damage + " points potential damage!");
+            }else {
+                System.out.println("Second attack failed");
+            }
         }
-        System.out.println("Attack failed");
-        return 0;
+
+        AttackResult result = new AttackResult(bodyPart, damage, attackNumber);
+
+        return result;
     }
 
     @Override
     public void dodge(Integer potentialDamage) {
-        System.out.println(this.creatureType + " defends");
 
         if (this.initiative > random(1, 10)) {
-            System.out.println("Successful dodge!");
+            System.out.println(this.creatureType + " successfully dodged!");
             return;
         }
 
-        int dmg = potentialDamage - this.endurance;
+        int damage = (potentialDamage >= this.endurance) ? (potentialDamage - this.endurance) : 0;
 
-        if (dmg > 0) {
-            this.lifePoints = this.lifePoints < dmg ? this.lifePoints - dmg : 0;
+        if (damage > 0) {
+
+            this.lifePoints -= damage;
+
+            if(this.lifePoints < 0) {
+                this.lifePoints = 0;
+            }
+
         } else {
-            System.out.println(this.creatureType + " is unharmed");
+            System.out.println(this.creatureType + " was not harmed");
         }
         System.out.println(this.creatureType + " has " + this.lifePoints + " life points");
 
@@ -120,4 +148,23 @@ public class Creature implements Fightable{
             System.out.println(this.creatureType + " is dead");
         }
     }
+
+    BodyPart getRandomBodyPart() throws AttackFailedException {
+
+        int sum = 0;
+        int r = random(1, 100);
+
+
+        for (BodyPart part : BodyPart.values()) {
+            sum += part.getProbability();
+
+            if (sum > r) {
+                return part;
+            }
+        }
+
+        throw new AttackFailedException();
+
+    }
+
 }

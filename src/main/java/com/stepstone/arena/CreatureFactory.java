@@ -30,14 +30,14 @@ public class CreatureFactory {
     }
 
     Creature randomCreature() {
-        Integer strength = random(10, 40);
-        Integer dexterity  = random(10, 40);
+        Integer strength = random(1, 15);
+        Integer dexterity  = random(1, 10);
         Integer initiative  = random(1, 5);
-        Integer velocity = random(40, 60);
-        Integer endurance = random(10, 40);
+        Integer velocity = random(1, 60);
+        Integer endurance = random(1, 3);
         Integer numberOfAttacks = random(1, 5);
         Integer numberOfDodges = random(1, 5);
-        Integer lifePoints  = random(50, 100);
+        Integer lifePoints  = 100;
 
         return generate(randomCreatureType(), strength, dexterity, initiative, velocity, endurance, numberOfAttacks, numberOfDodges, lifePoints);
     }

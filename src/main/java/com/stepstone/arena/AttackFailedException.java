@@ -1,4 +1,7 @@
 package com.stepstone.arena;
 
-public class AttackFailedException {
+public class AttackFailedException extends Exception {
+    public AttackFailedException() {
+        super("Unsuccessful attack");
+    }
 }

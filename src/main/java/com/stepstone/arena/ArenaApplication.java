@@ -31,36 +31,17 @@ public class ArenaApplication {
 //            System.out.println(iter.next());
 //        }
 //
-        for (Creature c : list) {
-            System.out.println(c);
-        }
+//        for (Creature c : list) {
+//            System.out.println(c);
+//        }
 
         Creature creature1 = list.get(0);
         Creature creature2 = list.get(1);
 
-        int rounds = 20;
-        while (rounds > 0) {
-            FightService.fight(creature1, creature2);
-            if (creature1.isAlive() && creature2.isAlive()) {
-                FightService.fight(creature2, creature1);
-                if (!(creature1.isAlive() && creature2.isAlive())) {
-                    break;
-                }
-            } else {
-                break;
-            }
-            rounds--;
-        }
+        System.out.println(creature1);
+        System.out.println(creature2);
 
-        if (rounds == 0) {
-            System.out.println("It's a TIE!");
-        } else {
-            if (creature1.isAlive()) {
-                System.out.println(creature1.getCreatureType() + " is the winner!");
-            } else {
-                System.out.println(creature2.getCreatureType() + " is the winner!");
-            }
-        }
+        FightService.fight(creature1, creature2);
 
         System.out.println(creature1);
         System.out.println(creature2);
